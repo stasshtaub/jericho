@@ -104,6 +104,7 @@
               <v-select
                 v-model="categories.selected"
                 :items="categories.items"
+                @change="clearSelectedBrands"
                 item-text="name"
                 item-value="id"
                 label="Категория товара"
@@ -117,7 +118,7 @@
                 v-model="brands.selected"
                 multiple
               >
-                <v-list-item v-for="brand in brands.items" :key="brand.id">
+                <v-list-item v-for="brand in filteredBrands" :key="brand.id">
                   <template v-slot:default="{ active }">
                     <v-list-item-action>
                       <v-checkbox :input-value="active"></v-checkbox>
@@ -218,41 +219,63 @@ export default {
         {
           id: 1,
           name: "LG",
+          categories: [1, 3],
           isSelected: false
         },
         {
           id: 2,
           name: "Tefal",
+          categories: [2, 3],
           isSelected: false
         },
         {
           id: 3,
           name: "Braun",
+          categories: [1],
           isSelected: false
         },
         {
           id: 4,
           name: "Rowenta",
+          categories: [1],
           isSelected: false
         },
         {
           id: 5,
           name: "Philips",
+          categories: [3],
           isSelected: false
         },
         {
           id: 6,
           name: "VITEK",
+          categories: [1, 2, 3],
           isSelected: false
         },
         {
           id: 7,
           name: "CANDY",
+          categories: [1, 2],
           isSelected: false
         }
       ]
     }
-  })
+  }),
+  computed: {
+    filteredBrands() {
+      if (this.categories.selected) {
+        return this.brands.items.filter(brand =>
+          brand.categories.includes(this.categories.selected)
+        );
+      }
+      return this.brands.items;
+    }
+  },
+  methods: {
+    clearSelectedBrands() {
+      this.brands.selected = [];
+    }
+  }
 };
 </script>
 
