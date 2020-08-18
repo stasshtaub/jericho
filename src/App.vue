@@ -1,7 +1,17 @@
 <template>
   <v-app>
+    <v-app-bar app>
+      <v-row>
+        <v-col cols="6">
+          <v-toolbar-title>"CBJ - Иерихон"</v-toolbar-title></v-col
+        >
+        <v-col cols="6"> Статистика</v-col>
+      </v-row>
+    </v-app-bar>
     <v-main>
-      <jericho-filter />
+      <v-container>
+        <jericho-filter />
+      </v-container>
     </v-main>
   </v-app>
 </template>
