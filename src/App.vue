@@ -1,12 +1,11 @@
 <template>
   <v-app>
     <v-app-bar app>
-      <v-row>
-        <v-col cols="6">
-          <v-toolbar-title>"CBJ - Иерихон"</v-toolbar-title></v-col
-        >
-        <v-col cols="6"> Статистика</v-col>
-      </v-row>
+      <v-toolbar-title>"CBJ - Иерихон"</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <nav>
+        <v-btn text href="/">Статистика</v-btn>
+      </nav>
     </v-app-bar>
     <v-main>
       <v-container>
