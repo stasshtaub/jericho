@@ -10,6 +10,7 @@
     <v-main>
       <v-container>
         <jericho-filter />
+        <stats v-if="stats" :stats="stats" />
       </v-container>
     </v-main>
   </v-app>
@@ -17,11 +18,17 @@
 
 <script>
 import jerichoFilter from "./components/jericho-filter";
+import stats from "./components/stats";
+import { mapGetters } from "vuex";
 
 export default {
   name: "App",
   components: {
-    jerichoFilter
+    jerichoFilter,
+    stats
+  },
+  computed: {
+    ...mapGetters(["stats"])
   }
 };
 </script>
