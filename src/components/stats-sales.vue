@@ -1,24 +1,30 @@
 <template>
   <div class="stats-sales">
-    <p class="text-h6">
-      Статистика продаж
-    </p>
+    <p class="text-h6">Статистика продаж</p>
     <div class="stats-sales__formats">
-      <p>
-        Форма представления данных:
-      </p>
-      <v-radio-group row>
+      <p>Форма представления данных:</p>
+      <v-radio-group v-model="formats.selected" row>
         <v-radio
-          v-for="format in formats"
+          v-for="format in formats.values"
           :key="format.id"
           :label="format.name"
           :value="format.id"
         ></v-radio>
       </v-radio-group>
     </div>
-    <div style="max-width: 800px">
-      <chart :chartdata="chartdata" :options="options" />
-    </div>
+    <keep-alive>
+      <div v-if="filled" style="max-width: 800px">
+        <v-data-table
+          v-if="formats.selected == 0"
+          :headers="table.headers"
+          :items="sales"
+          hide-default-footer
+          class="elevation-1"
+        >
+        </v-data-table>
+        <horizontal-chart v-else :chartdata="chartdata" />
+      </div>
+    </keep-alive>
   </div>
 </template>
 
@@ -26,55 +32,49 @@
 export default {
   name: "stats-sales",
   components: {
-    chart: () => import("./chart")
+    horizontalChart: () => import("./chart/horizontal-chart")
+  },
+  props: {
+    sales: { type: Array, dafult: () => [] } // [{name: <String>, percent: <Number>, quantity: <Number>}, ...]
   },
   data: () => ({
-    formats: [
-      { id: 0, name: "Табличная" },
-      { id: 1, name: "Схематичная" }
-    ],
+    filled: false,
+    formats: {
+      selected: 0,
+      values: [
+        { id: 0, name: "Табличная" },
+        { id: 1, name: "Схематичная" }
+      ]
+    },
     chartdata: {
-      labels: [
-        "Обратившиеся клиенты",
-        "Уточнение информации",
-        "Клиенты, которые приобрели товар"
-      ],
+      labels: [],
       datasets: [
         {
           label: "Процент",
           backgroundColor: ["red", "blue", "green"],
-          data: [80, 60, 20]
+          data: []
         }
       ]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      legend: {
-        display: false
-      },
-      tooltips: {
-        displayColors: false
-      },
-      scales: {
-        xAxes: [
-          {
-            ticks: {
-              beginAtZero: true
-            }
-          }
-        ],
-        yAxes: [
-          {
-            gridLines: {
-              display: false
-            }
-          }
-        ]
-      }
+    table: {
+      headers: [
+        {
+          text: "Стадия покупки",
+          align: "start",
+          sortable: false,
+          value: "name"
+        },
+        { text: "Количество людей", value: "quantity" },
+        { text: "Доля", value: "percent" }
+      ]
     }
-  })
+  }),
+  mounted() {
+    this.sales.forEach(sale => {
+      this.chartdata.labels.push(sale.name);
+      this.chartdata.datasets[0].data.push(sale.percent);
+    });
+    this.filled = true;
+  }
 };
 </script>
-
-<style></style>
