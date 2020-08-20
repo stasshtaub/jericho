@@ -1,19 +1,19 @@
 <template>
-  <v-sheet class="stats mt-8 pa-4">
-    <stats-sales />
-  </v-sheet>
+  <div class="stats pa-4">
+    <stats-sales class="mt-8" :sales="stats.sales" />
+    <stats-source class="mt-8" :sources="stats.sources" />
+  </div>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-
 export default {
   name: "stats",
   components: {
-    statsSales: () => import("./stats-sales")
+    statsSales: () => import("./stats-sales"),
+    statsSource: () => import("./stats-source")
   },
-  comuted: {
-    ...mapGetters(["stats"])
+  props: {
+    stats: { type: Object, default: () => {} }
   }
 };
 </script>
