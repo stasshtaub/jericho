@@ -10,6 +10,7 @@
     <v-main>
       <v-container>
         <jericho-filter />
+        <stats />
       </v-container>
     </v-main>
   </v-app>
@@ -17,11 +18,13 @@
 
 <script>
 import jerichoFilter from "./components/jericho-filter";
+import stats from "./components/stats";
 
 export default {
   name: "App",
   components: {
-    jerichoFilter
+    jerichoFilter,
+    stats
   }
 };
 </script>

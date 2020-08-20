@@ -1,6 +1,6 @@
 <template>
   <v-card class="jericho-filter pa-4">
-    <p class="text-body-1">
+    <p class="text-h6">
       Фильтр
     </p>
 
