@@ -25,7 +25,10 @@
               :hide-details="i !== settings.outlets.length - 1"
             ></v-checkbox>
           </div>
-          <v-btn class="mt-4">Добавить канал продаж</v-btn>
+          <v-btn class="mt-4" @click.stop="dialog = true"
+            >Добавить канал продаж</v-btn
+          >
+          <add-outlet :open="dialog" @add="addOutlet" @close="dialog = false" />
         </v-col>
 
         <!-- Период и выборка стаитистики -->
@@ -145,7 +148,11 @@
 import { mapGetters, mapActions } from "vuex";
 export default {
   name: "jericho-filter",
+  components: {
+    addOutlet: () => import("./add-outlet")
+  },
   data: () => ({
+    dialog: false,
     checkbox: false,
     valid: true,
     rules: {
@@ -185,7 +192,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getSettings", "getStats"]),
+    ...mapActions(["getSettings", "getStats", "addOutlet"]),
     clearSelectedBrands() {
       this.selected.brands = [];
     },

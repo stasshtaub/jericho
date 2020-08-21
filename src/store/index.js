@@ -12,6 +12,7 @@ mock
     /\/stats\?outlets=.+&date_start=\d+&date_end=\d+&target=\d+&category=\d+&brans=.+/
   )
   .reply(200, stats);
+mock.onPost("/outlets").reply(200);
 
 Vue.use(Vuex);
 
@@ -61,6 +62,19 @@ export default new Vuex.Store({
             reject();
           });
       });
+    },
+    addOutlet: async ({ state, commit }, name) => {
+      console.log("add in vuex");
+      Axios.post("/outlets", name)
+        .then(() => {
+          let id =
+            state.settings.outlets[state.settings.outlets.length - 1].id + 1; //fake id
+
+          commit("addOutlet", { id, name });
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   },
   mutations: {
@@ -69,6 +83,9 @@ export default new Vuex.Store({
     },
     setStats: (state, stats) => {
       state.stats = stats;
+    },
+    addOutlet: (state, outlet) => {
+      state.settings.outlets.push(outlet);
     }
   },
   getters: {
