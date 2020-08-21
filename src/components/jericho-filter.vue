@@ -4,23 +4,27 @@
       Фильтр
     </p>
 
-    <v-form @submit.prevent="onSubmit">
+    <v-form
+      ref="formFilters"
+      v-model="valid"
+      lazy-validation
+      @submit.prevent="onSubmit"
+    >
       <v-row cols="12">
         <!-- Точки продажи -->
         <v-col>
           <p>Точка продажи</p>
-          <v-list-item-group v-model="selected.outlets" multiple>
-            <v-list-item v-for="outlet in settings.outlets" :key="outlet.id">
-              <template v-slot:default="{ active }">
-                <v-list-item-action>
-                  <v-checkbox :input-value="active"></v-checkbox>
-                </v-list-item-action>
-                <v-list-item-content>
-                  <v-list-item-title v-text="outlet.name" />
-                </v-list-item-content>
-              </template>
-            </v-list-item>
-          </v-list-item-group>
+          <div>
+            <v-checkbox
+              v-for="(outlet, i) in settings.outlets"
+              v-model="selected.outlets"
+              :rules="outletsRules"
+              :label="outlet.name"
+              :value="outlet.id"
+              :key="outlet.id"
+              :hide-details="i !== settings.outlets.length - 1"
+            ></v-checkbox>
+          </div>
           <v-btn class="mt-4">Добавить канал продаж</v-btn>
         </v-col>
 
@@ -85,7 +89,7 @@
           <!-- Выборка стаитистики -->
           <div>
             <p>Выборка статистики</p>
-            <v-radio-group v-model="selected.target">
+            <v-radio-group :rules="rules.targets" v-model="selected.target">
               <v-radio
                 v-for="target in settings.targets"
                 :key="target.id"
@@ -103,6 +107,7 @@
             <v-select
               v-model="selected.category"
               :items="settings.categories"
+              :rules="rules.category"
               @change="clearSelectedBrands"
               item-text="name"
               item-value="id"
@@ -111,28 +116,26 @@
           </div>
           <!-- Бренды -->
           <div class="mt-3">
-            <p>Бренд</p>
-            <v-list-item-group
-              class="jericho-filter__brands"
-              v-model="selected.brands"
-              multiple
-            >
-              <v-list-item v-for="brand in filteredBrands" :key="brand.id">
-                <template v-slot:default="{ active }">
-                  <v-list-item-action>
-                    <v-checkbox :input-value="active"></v-checkbox>
-                  </v-list-item-action>
-                  <v-list-item-content>
-                    <v-list-item-title>{{ brand.name }}</v-list-item-title>
-                  </v-list-item-content>
-                </template>
-              </v-list-item>
-            </v-list-item-group>
+            <p class="mb-0">Бренд</p>
+            <div class="jericho-filter__brands">
+              <v-checkbox
+                v-for="(brand, i) in settings.brands"
+                v-model="selected.brands"
+                :rules="brandsRules"
+                :label="brand.name"
+                :value="brand.id"
+                :key="brand.id"
+                :hide-details="i !== settings.brands.length - 1"
+              ></v-checkbox>
+            </div>
           </div>
         </v-col>
       </v-row>
+      <div class="list"></div>
       <v-row justify="center">
-        <v-btn color="primary" type="submit">Получить статистику</v-btn>
+        <v-btn :disabled="!valid" color="primary" type="submit"
+          >Получить статистику</v-btn
+        >
       </v-row>
     </v-form>
   </v-card>
@@ -143,6 +146,13 @@ import { mapGetters, mapActions } from "vuex";
 export default {
   name: "jericho-filter",
   data: () => ({
+    checkbox: false,
+    valid: true,
+    rules: {
+      targets: [v => !!v || "Выберите формат выборки"],
+      category: [v => !!v || "Выберите категорию"],
+      sales: [v => !!v || "Выберите категорию"]
+    },
     selected: {
       category: null,
       target: null,
@@ -163,6 +173,15 @@ export default {
         );
       }
       return this.settings.brands;
+    },
+    outletsRules() {
+      return [
+        this.selected.outlets.length > 0 ||
+          "Выберите хотя бы одну точку продажи"
+      ];
+    },
+    brandsRules() {
+      return [this.selected.brands.length > 0 || "Выберите хотя бы один бренд"];
     }
   },
   methods: {
@@ -171,18 +190,23 @@ export default {
       this.selected.brands = [];
     },
     onSubmit() {
-      const { category, outlets, brands, target } = this.selected;
-      const data = {
-        category,
-        outlets,
-        brands,
-        target,
-        dateStart: this.selected.dateRange.start.date.replace(/-/g, ""),
-        dateEnd: this.selected.dateRange.end.date.replace(/-/g, "")
-      };
-      console.log(data);
+      if (this.validate()) {
+        const { category, outlets, brands, target } = this.selected;
+        const data = {
+          category,
+          outlets,
+          brands,
+          target,
+          dateStart: this.selected.dateRange.start.date.replace(/-/g, ""),
+          dateEnd: this.selected.dateRange.end.date.replace(/-/g, "")
+        };
+        console.log(data);
 
-      this.getStats(data);
+        this.getStats(data);
+      }
+    },
+    validate() {
+      return this.$refs.formFilters.validate();
     }
   },
   mounted() {
