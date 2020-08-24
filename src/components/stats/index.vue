@@ -1,7 +1,7 @@
 <template>
   <div class="stats pa-4">
     <stats-sales class="mt-8" :sales="stats.sales" />
-    <stats-source class="mt-8" :sources="stats.sources" />
+    <stats-sources class="mt-8" :sources="stats.sources" />
   </div>
 </template>
 
@@ -9,8 +9,8 @@
 export default {
   name: "stats",
   components: {
-    statsSales: () => import("./stats-sales"),
-    statsSource: () => import("./stats-source")
+    statsSales: () => import("./partials/sales"),
+    statsSources: () => import("./partials/sources")
   },
   props: {
     stats: { type: Object, default: () => {} }

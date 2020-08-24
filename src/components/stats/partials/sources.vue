@@ -1,6 +1,6 @@
 <template>
-  <div class="stats-sales">
-    <p class="text-h6">Статистика продаж</p>
+  <div class="stats-sorce">
+    <p class="text-h6">Источник получения информации о предприятии</p>
     <div class="stats-sales__formats">
       <p>Форма представления данных:</p>
       <v-radio-group v-model="formats.selected" row>
@@ -17,12 +17,12 @@
         <v-data-table
           v-if="formats.selected == 0"
           :headers="table.headers"
-          :items="sales"
+          :items="sources"
           hide-default-footer
           class="elevation-1"
         >
         </v-data-table>
-        <horizontal-chart v-else :chartdata="chartdata" />
+        <chart v-else :chartdata="chartdata" :options="options" />
       </div>
     </keep-alive>
   </div>
@@ -30,12 +30,11 @@
 
 <script>
 export default {
-  name: "stats-sales",
   components: {
-    horizontalChart: () => import("./chart/horizontal-chart")
+    chart: () => import("../../chart/standart-chart")
   },
   props: {
-    sales: { type: Array, dafult: () => [] } // [{name: <String>, percent: <Number>, quantity: <Number>}, ...]
+    sources: { type: Array, dafult: () => [] } // [{name: <String>, percent: <Number>}, ...]
   },
   data: () => ({
     filled: false,
@@ -44,6 +43,17 @@ export default {
       values: [
         { id: 0, name: "Табличная" },
         { id: 1, name: "Схематичная" }
+      ]
+    },
+    table: {
+      headers: [
+        {
+          text: "Источник получения информации",
+          align: "start",
+          sortable: false,
+          value: "name"
+        },
+        { text: "Доля", value: "percent" }
       ]
     },
     chartdata: {
@@ -55,24 +65,12 @@ export default {
           data: []
         }
       ]
-    },
-    table: {
-      headers: [
-        {
-          text: "Стадия покупки",
-          align: "start",
-          sortable: false,
-          value: "name"
-        },
-        { text: "Количество людей", value: "quantity" },
-        { text: "Доля", value: "percent" }
-      ]
     }
   }),
   mounted() {
-    this.sales.forEach(sale => {
-      this.chartdata.labels.push(sale.name);
-      this.chartdata.datasets[0].data.push(sale.percent);
+    this.sources.forEach(source => {
+      this.chartdata.labels.push(source.name);
+      this.chartdata.datasets[0].data.push(source.percent);
     });
     this.filled = true;
   }

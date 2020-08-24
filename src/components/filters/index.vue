@@ -1,5 +1,5 @@
 <template>
-  <v-card class="jericho-filter pa-4">
+  <v-card class="filters pa-4">
     <p class="text-h6">
       Фильтр
     </p>
@@ -120,7 +120,7 @@
           <!-- Бренды -->
           <div class="mt-3">
             <p class="mb-0">Бренд</p>
-            <div class="jericho-filter__brands">
+            <div class="filters__brands">
               <v-checkbox
                 v-for="(brand, i) in settings.brands"
                 v-model="selected.brands"
@@ -147,9 +147,9 @@
 <script>
 import { mapGetters, mapActions } from "vuex";
 export default {
-  name: "jericho-filter",
+  name: "filters",
   components: {
-    addOutlet: () => import("./add-outlet")
+    addOutlet: () => import("./partials/add-outlet")
   },
   data: () => ({
     dialog: false,
@@ -172,7 +172,8 @@ export default {
     }
   }),
   computed: {
-    ...mapGetters(["settings", "stats"]),
+    ...mapGetters("filters", ["settings"]),
+    ...mapGetters("stats", ["stats"]),
     filteredBrands() {
       if (this.selected.category) {
         return this.settings.brands.filter(brand =>
@@ -192,7 +193,8 @@ export default {
     }
   },
   methods: {
-    ...mapActions(["getSettings", "getStats", "addOutlet"]),
+    ...mapActions("filters", ["getSettings", "addOutlet"]),
+    ...mapActions("stats", ["getStats"]),
     clearSelectedBrands() {
       this.selected.brands = [];
     },
@@ -207,8 +209,6 @@ export default {
           dateStart: this.selected.dateRange.start.date.replace(/-/g, ""),
           dateEnd: this.selected.dateRange.end.date.replace(/-/g, "")
         };
-        console.log(data);
-
         this.getStats(data);
       }
     },
@@ -223,7 +223,7 @@ export default {
 </script>
 
 <style lang="scss">
-.jericho-filter {
+.filters {
   &__brands {
     max-height: 288px;
     overflow-y: auto;
