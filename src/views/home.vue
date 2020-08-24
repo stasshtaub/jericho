@@ -7,8 +7,8 @@
 
 <script>
 import { mapGetters } from "vuex";
-import filters from "./components/filters/index";
-import stats from "./components/stats/index";
+import filters from "@/components/filters/index";
+import stats from "@/components/stats/index";
 
 export default {
   components: {
