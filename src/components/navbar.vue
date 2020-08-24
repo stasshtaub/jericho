@@ -3,7 +3,7 @@
     <v-toolbar-title>"CBJ - Иерихон"</v-toolbar-title>
     <v-spacer></v-spacer>
     <nav>
-      <v-btn text href="/">Статистика</v-btn>
+      <v-btn text to="/">Статистика</v-btn>
     </nav>
   </v-app-bar>
 </template>
