@@ -1,4 +1,4 @@
-import Axios from "../../../../plugins/axiosMocked";
+import Axios from "../../../../plugins/axios";
 
 export default {
   getStats: (
@@ -8,7 +8,7 @@ export default {
     return new Promise((resolve, reject) => {
       const url = `/stats?outlets=${outlets.join(
         ","
-      )}&date_start=${dateStart}&date_end=${dateEnd}&target=${target}&category=${category}&brans=${brands.join(
+      )}&date_start=${dateStart}&date_end=${dateEnd}&target=${target}&category=${category}&brands=${brands.join(
         ","
       )}`;
       console.log(url);

@@ -1,4 +1,4 @@
-import Axios from "../../../../plugins/axiosMocked";
+import Axios from "../../../../plugins/axios";
 
 export default {
   getSettings: ({ commit }) => {
