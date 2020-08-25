@@ -126,13 +126,13 @@
             <p class="mb-0">Бренд</p>
             <div class="filters__brands">
               <v-checkbox
-                v-for="(brand, i) in settings.brands"
+                v-for="(brand, i) in filteredBrands"
                 v-model="selected.brands"
                 :rules="brandsRules"
                 :label="brand.name"
                 :value="brand.id"
                 :key="brand.id"
-                :hide-details="i !== settings.brands.length - 1"
+                :hide-details="i !== filteredBrands.length - 1"
               ></v-checkbox>
             </div>
           </div>
