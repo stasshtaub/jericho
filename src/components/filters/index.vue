@@ -57,8 +57,10 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
+                    kjrfkbpjdfk
+                    @input="onInputStartDate"
+                    locale="ru"
                     v-model="selected.dateRange.start.date"
-                    @input="selected.dateRange.start.menu = false"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -74,7 +76,7 @@
                   <template v-slot:activator="{ on, attrs }">
                     <v-text-field
                       v-model="selected.dateRange.end.date"
-                      label="От"
+                      label="До"
                       prepend-icon="mdi-calendar"
                       readonly
                       v-bind="attrs"
@@ -82,8 +84,10 @@
                     ></v-text-field>
                   </template>
                   <v-date-picker
+                    locale="ru"
                     v-model="selected.dateRange.end.date"
                     @input="selected.dateRange.end.menu = false"
+                    :min="selected.dateRange.start.date"
                   ></v-date-picker>
                 </v-menu>
               </v-col>
@@ -134,7 +138,6 @@
           </div>
         </v-col>
       </v-row>
-      <div class="list"></div>
       <v-row justify="center">
         <v-btn :disabled="!valid" color="primary" type="submit"
           >Получить статистику</v-btn
@@ -152,6 +155,7 @@ export default {
     addOutlet: () => import("./partials/add-outlet")
   },
   data: () => ({
+    dates: [],
     dialog: false,
     checkbox: false,
     valid: true,
@@ -214,6 +218,12 @@ export default {
     },
     validate() {
       return this.$refs.formFilters.validate();
+    },
+    onInputStartDate(date) {
+      if (date > this.selected.dateRange.end.date) {
+        this.selected.dateRange.end.date = date;
+      }
+      this.selected.dateRange.start.menu = false;
     }
   },
   mounted() {
