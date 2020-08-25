@@ -13,7 +13,7 @@
       </v-radio-group>
     </div>
     <keep-alive>
-      <div v-if="filled" style="max-width: 800px">
+      <div style="max-width: 800px">
         <v-data-table
           no-data-text="Нет продаж"
           v-if="formats.selected == 0"
@@ -39,7 +39,6 @@ export default {
     sales: { type: Array, dafult: () => [] } // [{name: <String>, percent: <Number>, quantity: <Number>}, ...]
   },
   data: () => ({
-    filled: false,
     formats: {
       selected: 0,
       values: [
@@ -80,13 +79,6 @@ export default {
 
       return chartdata;
     }
-  },
-  mounted() {
-    this.sales.forEach(sale => {
-      this.chartdata.labels.push(sale.name);
-      this.chartdata.datasets[0].data.push(sale.percent);
-    });
-    this.filled = true;
   }
 };
 </script>

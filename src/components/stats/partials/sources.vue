@@ -13,7 +13,7 @@
       </v-radio-group>
     </div>
     <keep-alive>
-      <div v-if="filled" style="max-width: 800px">
+      <div style="max-width: 800px">
         <v-data-table
           no-data-text="Нет продаж"
           v-if="formats.selected == 0"
@@ -38,7 +38,6 @@ export default {
     sources: { type: Array, dafult: () => [] } // [{name: <String>, percent: <Number>}, ...]
   },
   data: () => ({
-    filled: false,
     formats: {
       selected: 0,
       values: [
@@ -56,24 +55,28 @@ export default {
         },
         { text: "Доля", value: "percent" }
       ]
-    },
-    chartdata: {
-      labels: [],
-      datasets: [
-        {
-          label: "Процент",
-          backgroundColor: ["red", "blue", "green"],
-          data: []
-        }
-      ]
     }
   }),
-  mounted() {
-    this.sources.forEach(source => {
-      this.chartdata.labels.push(source.name);
-      this.chartdata.datasets[0].data.push(source.percent);
-    });
-    this.filled = true;
+  computed: {
+    chartdata() {
+      const chartdata = {
+        labels: [],
+        datasets: [
+          {
+            label: "Процент",
+            backgroundColor: ["red", "blue", "green"],
+            data: []
+          }
+        ]
+      };
+
+      this.sources.forEach(source => {
+        chartdata.labels.push(source.name);
+        chartdata.datasets[0].data.push(source.percent);
+      });
+
+      return chartdata;
+    }
   }
 };
 </script>
