@@ -15,6 +15,7 @@
     <keep-alive>
       <div v-if="filled" style="max-width: 800px">
         <v-data-table
+          no-data-text="Нет продаж"
           v-if="formats.selected == 0"
           :headers="table.headers"
           :items="sources"
@@ -22,7 +23,7 @@
           class="elevation-1"
         >
         </v-data-table>
-        <chart v-else :chartdata="chartdata" :options="options" />
+        <chart v-else :chart-data="chartdata" />
       </div>
     </keep-alive>
   </div>

@@ -15,6 +15,7 @@
     <keep-alive>
       <div v-if="filled" style="max-width: 800px">
         <v-data-table
+          no-data-text="Нет продаж"
           v-if="formats.selected == 0"
           :headers="table.headers"
           :items="sales"
@@ -22,7 +23,7 @@
           class="elevation-1"
         >
         </v-data-table>
-        <horizontal-chart v-else :chartdata="chartdata" />
+        <horizontal-chart v-else :chart-data="chartdata" />
       </div>
     </keep-alive>
   </div>
@@ -46,16 +47,6 @@ export default {
         { id: 1, name: "Схематичная" }
       ]
     },
-    chartdata: {
-      labels: [],
-      datasets: [
-        {
-          label: "Процент",
-          backgroundColor: ["red", "blue", "green"],
-          data: []
-        }
-      ]
-    },
     table: {
       headers: [
         {
@@ -69,6 +60,27 @@ export default {
       ]
     }
   }),
+  computed: {
+    chartdata() {
+      const chartdata = {
+        labels: [],
+        datasets: [
+          {
+            label: "Процент",
+            backgroundColor: ["red", "blue", "green"],
+            data: []
+          }
+        ]
+      };
+
+      this.sales.forEach(sale => {
+        chartdata.labels.push(sale.name);
+        chartdata.datasets[0].data.push(sale.percent);
+      });
+
+      return chartdata;
+    }
+  },
   mounted() {
     this.sales.forEach(sale => {
       this.chartdata.labels.push(sale.name);

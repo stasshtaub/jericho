@@ -1,10 +1,8 @@
+import { mixins } from "vue-chartjs";
+const { reactiveProp } = mixins;
+
 export default {
-  props: {
-    chartdata: {
-      type: Object,
-      default: null
-    }
-  },
+  mixins: [reactiveProp],
   data: () => ({
     options: {
       responsive: true,
@@ -37,6 +35,6 @@ export default {
     }
   }),
   mounted() {
-    this.renderChart(this.chartdata, this.options);
+    this.renderChart(this.chartData, this.options);
   }
 };
