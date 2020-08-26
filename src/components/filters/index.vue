@@ -233,10 +233,5 @@ export default {
 </script>
 
 <style lang="scss">
-.filters {
-  &__brands {
-    max-height: 288px;
-    overflow-y: auto;
-  }
-}
+@import "../../assets/scss/partials/filters";
 </style>
