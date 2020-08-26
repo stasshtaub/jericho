@@ -15,15 +15,18 @@ export default {
     });
   },
   addOutlet: async ({ state, commit }, name) => {
-    Axios.post("/outlets", name)
-      .then(() => {
-        let id =
-          state.settings.outlets[state.settings.outlets.length - 1].id + 1; //fake id
+    // await Axios.post("/outles", name);
+    // const message = "Не удалось добавить точку продаж";
+    // commit("setError", { message, error }, { root: true }); // мутация для логов (глобавльный стор)
 
-        commit("addOutlet", { id, name });
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    try {
+      await Axios.post("/outles", name);
+      const id =
+        state.settings.outlets[state.settings.outlets.length - 1].id + 1; //fake id
+      commit("addOutlet", { id, name });
+    } catch (error) {
+      const message = "Не удалось добавить точку продаж";
+      commit("setError", { message, error }, { root: true }); // мутация для логов (глобавльный стор)
+    }
   }
 };
