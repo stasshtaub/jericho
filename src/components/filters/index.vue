@@ -149,13 +149,14 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { prepareForOutput, prepareForRequest } from "../../utils/date-helper";
+
 export default {
   name: "filters",
   components: {
     addOutlet: () => import("./partials/add-outlet")
   },
   data: () => ({
-    dates: [],
     dialog: false,
     checkbox: false,
     valid: true,
@@ -170,8 +171,8 @@ export default {
       outlets: [],
       brands: [],
       dateRange: {
-        start: { date: new Date().toISOString().substr(0, 10), menu: false },
-        end: { date: new Date().toISOString().substr(0, 10), menu: false }
+        start: { date: prepareForOutput(new Date()), menu: false },
+        end: { date: prepareForOutput(new Date()), menu: false }
       }
     }
   }),
@@ -179,12 +180,12 @@ export default {
     ...mapGetters("filters", ["settings"]),
     ...mapGetters("stats", ["stats"]),
     filteredBrands() {
-      if (this.selected.category) {
-        return this.settings.brands.filter(brand =>
-          brand.categories.includes(this.selected.category)
-        );
+      const { category } = this.selected;
+      const { brands } = this.settings;
+      if (category) {
+        return brands.filter(({ categories }) => categories.includes(category));
       }
-      return this.settings.brands;
+      return brands;
     },
     outletsRules() {
       return [
@@ -205,15 +206,16 @@ export default {
     onSubmit() {
       if (this.validate()) {
         const { category, outlets, brands, target } = this.selected;
-        const data = {
+        const { start, end } = this.selected.dateRange;
+
+        this.getStats({
           category,
           outlets,
           brands,
           target,
-          dateStart: this.selected.dateRange.start.date.replace(/-/g, ""),
-          dateEnd: this.selected.dateRange.end.date.replace(/-/g, "")
-        };
-        this.getStats(data);
+          dateStart: prepareForRequest(start.date),
+          dateEnd: prepareForRequest(end.date)
+        });
       }
     },
     validate() {
