@@ -20,15 +20,11 @@ export default new Vuex.Store({
   },
   mutations: {
     setError: (state, { message, error }) => {
-      console.log("in mutation setError");
-
       state.error.hasError = true;
       state.error.errorObj = error;
       state.error.message = message;
     },
     clearError: state => {
-      console.log("clear error");
-
       state.error = {
         hasError: false,
         errorObj: null,

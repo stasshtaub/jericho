@@ -15,10 +15,6 @@ export default {
     });
   },
   addOutlet: async ({ state, commit }, name) => {
-    // await Axios.post("/outles", name);
-    // const message = "Не удалось добавить точку продаж";
-    // commit("setError", { message, error }, { root: true }); // мутация для логов (глобавльный стор)
-
     try {
       await Axios.post("/outles", name);
       const id =
@@ -26,7 +22,7 @@ export default {
       commit("addOutlet", { id, name });
     } catch (error) {
       const message = "Не удалось добавить точку продаж";
-      commit("setError", { message, error }, { root: true }); // мутация для логов (глобавльный стор)
+      commit("setError", { message, error }, { root: true });
     }
   }
 };
