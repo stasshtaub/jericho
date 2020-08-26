@@ -8,7 +8,7 @@
 import defaultLayout from "./layouts/default";
 
 export default {
-  name: "App",
+  name: "app",
   components: {
     defaultLayout
   }
