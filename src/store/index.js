@@ -19,10 +19,8 @@ export default new Vuex.Store({
     }
   },
   mutations: {
-    setError: (state, { message, error }) => {
-      state.error.hasError = true;
-      state.error.errorObj = error;
-      state.error.message = message;
+    setError: (state, { message, errorObj }) => {
+      state.error = { ...state.error, hasError: true, message, errorObj };
     },
     clearError: state => {
       state.error = {

@@ -1,27 +1,21 @@
 import Axios from "../../../../plugins/axios";
 
 export default {
-  getStats: (
+  getStats: async (
     { commit },
     { outlets, dateStart, dateEnd, target, category, brands }
   ) => {
-    return new Promise((resolve, reject) => {
+    try {
       const url = `/stats?outlets=${outlets.join(
         ","
       )}&date_start=${dateStart}&date_end=${dateEnd}&target=${target}&category=${category}&brands=${brands.join(
         ","
       )}`;
-      console.log(url);
-      Axios.get(url)
-        .then(resp => {
-          console.log(resp.data);
-          commit("setStats", resp.data);
-          resolve();
-        })
-        .catch(err => {
-          console.log(err);
-          reject();
-        });
-    });
+      const { data } = await Axios.get(url);
+      commit("setStats", data);
+    } catch (errorObj) {
+      const message = "Не удалось получить статистику";
+      commit("setError", { message, errorObj }, { root: true });
+    }
   }
 };
