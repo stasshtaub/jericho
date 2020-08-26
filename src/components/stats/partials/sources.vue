@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import chartMapper from "../../../utils/chart-mapper";
+
 export default {
   components: {
     chart: () => import("../../chart/standart-chart")
@@ -59,23 +61,7 @@ export default {
   }),
   computed: {
     chartdata() {
-      const chartdata = {
-        labels: [],
-        datasets: [
-          {
-            label: "Процент",
-            backgroundColor: ["red", "blue", "green"],
-            data: []
-          }
-        ]
-      };
-
-      this.sources.forEach(source => {
-        chartdata.labels.push(source.name);
-        chartdata.datasets[0].data.push(source.percent);
-      });
-
-      return chartdata;
+      return chartMapper(this.sources);
     }
   }
 };

@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import chartMapper from "../../../utils/chart-mapper";
 export default {
   name: "stats-sales",
   components: {
@@ -61,23 +62,7 @@ export default {
   }),
   computed: {
     chartdata() {
-      const chartdata = {
-        labels: [],
-        datasets: [
-          {
-            label: "Процент",
-            backgroundColor: ["red", "blue", "green"],
-            data: []
-          }
-        ]
-      };
-
-      this.sales.forEach(sale => {
-        chartdata.labels.push(sale.name);
-        chartdata.datasets[0].data.push(sale.percent);
-      });
-
-      return chartdata;
+      return chartMapper(this.sales);
     }
   }
 };
