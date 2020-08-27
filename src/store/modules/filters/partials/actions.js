@@ -10,11 +10,13 @@ export default {
       commit("setError", { message, errorObj }, { root: true });
     }
   },
-  addOutlet: async ({ state, commit }, name) => {
+  addOutlet: async ({ commit }, name) => {
     try {
-      await Axios.post("/outles", name);
-      const id =
-        state.settings.outlets[state.settings.outlets.length - 1].id + 1; //fake id
+      const { id } = await Axios.post(`/outlets`, null, {
+        params: {
+          name
+        }
+      });
       commit("addOutlet", { id, name });
     } catch (errorObj) {
       const message = "Не удалось добавить точку продаж";
