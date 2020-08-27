@@ -1,7 +1,7 @@
 <template>
-  <div class="stats-sorce">
-    <p class="text-h6">Источник получения информации о предприятии</p>
-    <div class="stats-sales__formats">
+  <div>
+    <p class="text-h6">{{ title }}</p>
+    <div>
       <p>Форма представления данных:</p>
       <v-radio-group v-model="formats.selected" row>
         <v-radio
@@ -17,27 +17,24 @@
         <v-data-table
           no-data-text="Нет продаж"
           v-if="formats.selected == 0"
-          :headers="table.headers"
-          :items="sources"
+          :headers="tableHeaders"
+          :items="tableItems"
           hide-default-footer
           class="elevation-1"
         >
         </v-data-table>
-        <chart v-else :chart-data="chartdata" />
+        <slot v-else name="chart"></slot>
       </div>
     </keep-alive>
   </div>
 </template>
 
 <script>
-import chartMapper from "../../../utils/chart-mapper";
-
 export default {
-  components: {
-    chart: () => import("../../chart/standart-chart")
-  },
   props: {
-    sources: { type: Array, dafult: () => [] } // [{name: <String>, percent: <Number>}, ...]
+    title: { type: String, default: "" },
+    tableHeaders: { type: Array, default: () => [] },
+    tableItems: { type: Array, default: () => [] }
   },
   data: () => ({
     formats: {
@@ -46,23 +43,7 @@ export default {
         { id: 0, name: "Табличная" },
         { id: 1, name: "Схематичная" }
       ]
-    },
-    table: {
-      headers: [
-        {
-          text: "Источник получения информации",
-          align: "start",
-          sortable: false,
-          value: "name"
-        },
-        { text: "Доля", value: "percent" }
-      ]
     }
-  }),
-  computed: {
-    chartdata() {
-      return chartMapper(this.sources);
-    }
-  }
+  })
 };
 </script>
