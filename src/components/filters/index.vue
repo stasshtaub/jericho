@@ -144,7 +144,7 @@
           :disabled="!valid"
           color="primary"
           type="submit"
-          :loading="loading"
+          :loading="loadingSubmit"
           >Получить статистику</v-btn
         >
       </v-row>
@@ -166,6 +166,7 @@ export default {
   },
   data: () => ({
     loading: true,
+    loadingSubmit: true,
     dialog: false,
     valid: true,
     rules: {
@@ -213,7 +214,7 @@ export default {
     },
     async onSubmit() {
       if (this.validate()) {
-        this.loading = true;
+        this.loadingSubmit = true;
         const { category, outlets, brands, target } = this.selected;
         const { start, end } = this.selected.dateRange;
 
@@ -226,7 +227,7 @@ export default {
           dateEnd: prepareForRequest(end.date)
         });
 
-        this.loading = false;
+        this.loadingSubmit = false;
       }
     },
     validate() {
