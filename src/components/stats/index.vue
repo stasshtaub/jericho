@@ -3,6 +3,7 @@
     <template v-if="stats.sales.length && stats.sources.length">
       <stats-block
         class="mt-8"
+        title="Статистика продаж"
         :table-headers="salesHeaders"
         :table-items="stats.sales"
       >
@@ -12,6 +13,7 @@
       </stats-block>
       <stats-block
         class="mt-8"
+        title="Источник получения информации о предприятии"
         :table-headers="sourcesHeaders"
         :table-items="stats.sources"
       >
