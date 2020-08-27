@@ -166,7 +166,7 @@ export default {
   },
   data: () => ({
     loading: true,
-    loadingSubmit: true,
+    loadingSubmit: false,
     dialog: false,
     valid: true,
     rules: {
