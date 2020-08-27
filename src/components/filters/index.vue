@@ -5,6 +5,7 @@
     </p>
 
     <v-form
+      v-if="!loading"
       ref="formFilters"
       v-model="valid"
       lazy-validation
@@ -139,11 +140,18 @@
         </v-col>
       </v-row>
       <v-row justify="center">
-        <v-btn :disabled="!valid" color="primary" type="submit"
+        <v-btn
+          :disabled="!valid"
+          color="primary"
+          type="submit"
+          :loading="loading"
           >Получить статистику</v-btn
         >
       </v-row>
     </v-form>
+    <div class="text-center pt-4 pb-4" v-else>
+      <v-progress-circular indeterminate color="primary"></v-progress-circular>
+    </div>
   </v-card>
 </template>
 
@@ -157,8 +165,8 @@ export default {
     addOutlet: () => import("./partials/add-outlet")
   },
   data: () => ({
+    loading: true,
     dialog: false,
-    checkbox: false,
     valid: true,
     rules: {
       targets: [v => !!v || "Выберите формат выборки"],
@@ -203,12 +211,13 @@ export default {
     clearSelectedBrands() {
       this.selected.brands = [];
     },
-    onSubmit() {
+    async onSubmit() {
       if (this.validate()) {
+        this.loading = true;
         const { category, outlets, brands, target } = this.selected;
         const { start, end } = this.selected.dateRange;
 
-        this.getStats({
+        await this.getStats({
           category,
           outlets,
           brands,
@@ -216,6 +225,8 @@ export default {
           dateStart: prepareForRequest(start.date),
           dateEnd: prepareForRequest(end.date)
         });
+
+        this.loading = false;
       }
     },
     validate() {
@@ -228,8 +239,9 @@ export default {
       this.selected.dateRange.start.menu = false;
     }
   },
-  mounted() {
-    this.getSettings();
+  async mounted() {
+    await this.getSettings();
+    this.loading = false;
   }
 };
 </script>
