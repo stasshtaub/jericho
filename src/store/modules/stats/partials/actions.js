@@ -6,12 +6,15 @@ export default {
     { outlets, dateStart, dateEnd, target, category, brands }
   ) => {
     try {
-      const url = `/stats?outlets=${outlets.join(
-        ","
-      )}&date_start=${dateStart}&date_end=${dateEnd}&target=${target}&category=${category}&brands=${brands.join(
-        ","
-      )}`;
-      const { data } = await Axios.get(url);
+      const params = {
+        outlets: outlets.join(","),
+        date_start: dateStart,
+        date_end: dateEnd,
+        target,
+        category,
+        brands: brands.join(",")
+      };
+      const { data } = await Axios.get("/stats", { params });
       commit("setStats", data);
     } catch (errorObj) {
       const message = "Не удалось получить статистику";
